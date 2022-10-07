@@ -1,31 +1,28 @@
-function getData(callback){
-    callback();
-    return JSON.parse(localStorage.getItem("list_shoes"));
-}
-let data = getData(setShoeDetail);
+fetch('data/shoes.json')
+    .then(response => response.json())
+    .then(data => {
+        data.shoes.forEach(element => {
+            element.quantity = 0;
+        })
+        if (JSON.parse(localStorage.getItem("list_shoes")) == null) {
 
-console.log(data);
-render(data)
-load_cart();
-contentChanged();
-sumPrice(data);
+            localStorage.setItem("list_shoes", JSON.stringify(data.shoes));
+        }
+
+    })
+    .then(() => {
+        data = JSON.parse(localStorage.getItem("list_shoes"));
+        render(data);
+        load_cart();
+        contentChanged();
+        sumPrice(data);
+    });
 
 
 
 
-function setShoeDetail() {
-    fetch('data/shoes.json')
-        .then(response => response.json())
-        .then(data => {
-            data.shoes.forEach(element => {
-                element.quantity = 0;
-            })
-            if (JSON.parse(localStorage.getItem("list_shoes")) == null) {
 
-                localStorage.setItem("list_shoes", JSON.stringify(data.shoes));
-            }
-        });
-}
+
 
 function render(data) {
     let list_item = document.querySelector(".list-product");
@@ -58,7 +55,7 @@ function renderCart(data, id) {
     var cart_list = document.querySelector('.item_list-cart');
     var cart_item = document.createElement('div');
     cart_item.classList.add('cart-item');
-    cart_item.setAttribute('id',`item-${id}`) ;
+    cart_item.setAttribute('id', `item-${id}`);
     content = '';
     content = `
                         <div class="cart-img" style="background-color : ${data[id - 1].color} ;">
@@ -86,7 +83,7 @@ function renderCart(data, id) {
     `
     cart_item.innerHTML = content;
     cart_list.appendChild(cart_item);
-    
+
     var addBtn = document.querySelector('#item-' + id + ' .add-to-cart');
     var check = document.querySelector('#item-' + id + ' .check-icon');
     addBtn.style.display = 'none';
@@ -121,8 +118,8 @@ function remove_cart(id) {
     check.style.display = 'none';
     sumPrice(data);
     item_remove.style.animation = 'ScaleIn 0.5s ease-in'
-    setTimeout(function(){item_remove.remove()},500)
-    
+    setTimeout(function () { item_remove.remove() }, 500)
+
 }
 
 function add_quantity(id) {
@@ -153,13 +150,13 @@ function subtract_quantity(id) {
 
 }
 
-function sumPrice(data){
+function sumPrice(data) {
     sum = 0;
     data.forEach(element => {
-        sum+=element.price*element.quantity;
+        sum += element.price * element.quantity;
     })
     var price = document.querySelector('.your-cart .card-price');
-    price.innerHTML = '$'+sum.toFixed(2);
+    price.innerHTML = '$' + sum.toFixed(2);
 }
 
 var myElement = document.querySelector('.your-cart .item_list-cart');
