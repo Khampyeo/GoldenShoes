@@ -1,6 +1,10 @@
+function getData(callback){
+    callback();
+    return JSON.parse(localStorage.getItem("list_shoes"));
+}
+let data = getData(setShoeDetail);
 
-setShoeDetail();
-let data = JSON.parse(localStorage.getItem("list_shoes"));
+console.log(data);
 render(data)
 load_cart();
 contentChanged();
@@ -160,7 +164,6 @@ function sumPrice(data){
 
 var myElement = document.querySelector('.your-cart .item_list-cart');
 if (window.addEventListener) {
-    // Normal browsers
     myElement.addEventListener('DOMSubtreeModified', contentChanged, false);
 }
 function contentChanged() {
