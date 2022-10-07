@@ -143,7 +143,7 @@ function subtract_quantity(id) {
         localStorage.setItem("list_shoes", JSON.stringify(data));
     }
     else {
-        quantity.innerHTML = num;
+        quantity.innerHTML = 0;
         remove_cart(id);
     }
     sumPrice(data);
